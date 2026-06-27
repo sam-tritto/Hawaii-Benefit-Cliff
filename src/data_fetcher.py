@@ -40,13 +40,17 @@ def fetch_cps_data(year=2023, cache_path='data/hawaii_hours_data.csv'):
             # Read columns of interest directly from zip file
             df = pd.read_csv(
                 url, 
-                usecols=['gestfips', 'pehrusl1'],
+                usecols=['gestfips', 'pehrusl1', 'hrmis', 'prcow1'],
                 compression='zip'
             )
             
-            # Filter: Target states and valid usual hours worked (> 0)
-            # PEHRUSL1 >= 1 means they actually report positive hours
-            df_filtered = df[df['gestfips'].isin(target_fips) & (df['pehrusl1'] >= 1)].copy()
+            # Filter: Target states, valid usual hours, Month-in-Sample 1 (unique), and Private Sector (prcow1 == 4)
+            df_filtered = df[
+                df['gestfips'].isin(target_fips) & 
+                (df['pehrusl1'] >= 1) & 
+                (df['hrmis'] == 1) & 
+                (df['prcow1'] == 4)
+            ].copy()
             
             # Map FIPS to state codes
             df_filtered['state'] = df_filtered['gestfips'].map(fips_map)
