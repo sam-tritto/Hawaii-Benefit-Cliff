@@ -1,0 +1,22 @@
+[project]
+name = "hawaii-benefit-cliff"
+version = "0.1.0"
+description = "A tutorial on the Hawaii 20-Hour Benefit Cliff and Bayesian causal inference"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pymc>=5.15.0",
+    "arviz>=0.18.0",
+    "numpy>=1.26.0",
+    "pandas>=2.2.0",
+    "matplotlib>=3.8.0",
+    "seaborn>=0.13.0",
+    "ipykernel>=6.29.0",
+    "scipy>=1.12.0",
+    "ipywidgets>=8.1.0",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "jupyter>=1.0.0",
+]
