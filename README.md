@@ -74,7 +74,7 @@ We model the weights $w$ in PyMC using a **Dirichlet prior**, which naturally gu
 ### Causal Insight: The Survey Heap Effect
 In self-reported labor data (like the CPS), workers round their hours to multiples of 5 (10, 15, 20, etc.). 
 - **The Bunching Failure**: Standard polynomial bunching assumes a smooth distribution and completely fails here. It over-predicts the counterfactual at 19 hours (expecting a smooth curve between 15 and 20) and under-predicts the natural peak at 20. This falsely suggests Hawaii has a *deficit* at 19 hours.
-- **The Synthetic Control Solution**: Distributional Synthetic Control uses donor states that share the same rounding behaviors. By matching Hawaii's distribution to a combination of California, Nevada, Florida, and Alaska, the counterfactual naturally expects low counts at 19 and a large peak at 20, cleanly isolating Hawaii's true causal bunching (~6.6x relative excess at 19 hours).
+- **The Synthetic Control Solution**: Distributional Synthetic Control uses donor states that share the same rounding behaviors. By matching Hawaii's distribution to a combination of California, Nevada, Florida, and Alaska, the counterfactual naturally expects low counts at 19 and a large peak at 20, cleanly isolating Hawaii's true causal bunching (~10.6x relative excess at 19 hours within the 10-30h range).
 
 ---
 
@@ -82,6 +82,6 @@ In self-reported labor data (like the CPS), workers round their hours to multipl
 
 This project demonstrates the practical application of Bayesian causal inference to structural labor regulations:
 1. **The Policy Cliff**: The Prepaid Health Care Act successfully insures full-time workers, but creates a sharp cost curve (cliff) at 20 hours. Employers respond by capping part-time shifts at exactly 19 hours.
-2. **Causal Measurement**: The Distributional Synthetic Control model estimates that Hawaii has **0.86% of its part-time workforce** at exactly 19 hours, compared to a synthetic baseline of only **0.13%**, proving the existence of substantial regulatory shift capping.
+2. **Causal Measurement**: The Distributional Synthetic Control model estimates that Hawaii has **1.91% of its 10-30h part-time workforce** at exactly 19 hours, compared to a synthetic baseline of only **0.18%** (a 10.6x relative excess), and a **4.07% labor deficit** in the 20-23 hours range.
 3. **Policy Design**: To eliminate this shift distortion, policymakers should consider proration or graduated subsidies rather than binary thresholds, smoothing the cost curve and allowing part-time workers to choose their hours freely.
 

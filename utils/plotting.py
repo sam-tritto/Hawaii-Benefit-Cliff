@@ -213,3 +213,49 @@ def plot_donor_weights(donor_names, w_samples):
         
     plt.tight_layout()
     return fig
+
+def plot_causal_treatment_effects(hours, actual_dist, synthetic_samples):
+    """
+    Plots the difference between actual Hawaii proportions and Synthetic Hawaii counterfactual.
+    Shows the net treatment effect with 95% credible intervals as a bar chart.
+    """
+    set_style()
+    actual_dist = np.asarray(actual_dist)
+    hours = np.asarray(hours)
+    
+    # Calculate difference samples: Actual - Counterfactual
+    diff_samples = actual_dist[:, None] - synthetic_samples # Shape: (len(hours), n_samples)
+    
+    diff_median = np.median(diff_samples, axis=1)
+    diff_lower = np.percentile(diff_samples, 2.5, axis=1)
+    diff_upper = np.percentile(diff_samples, 97.5, axis=1)
+    
+    fig, ax = plt.subplots(figsize=(10, 6), dpi=150)
+    
+    # Draw baseline at 0
+    ax.axhline(0, color=PALETTE['donor'], linestyle='-', linewidth=1.5, alpha=0.8)
+    
+    # Draw deficit/excess as a bar chart
+    colors = [PALETTE['accent'] if val >= 0 else PALETTE['hawaii'] for val in diff_median]
+    bars = ax.bar(hours, diff_median * 100, color=colors, alpha=0.75, 
+                  edgecolor=PALETTE['primary_dark'], width=0.8,
+                  label='Causal Effect (HI - Synthetic HI)')
+    
+    # Plot credible intervals as error bars
+    yerr = [(diff_median - diff_lower) * 100, (diff_upper - diff_median) * 100]
+    ax.errorbar(hours, diff_median * 100, yerr=yerr, fmt='none', 
+                ecolor=PALETTE['primary_dark'], elinewidth=1.2, capsize=3, label='95% Credible Interval')
+    
+    # Threshold indicator line
+    ax.axvline(20, color=PALETTE['primary_dark'], linestyle=':', linewidth=1.5)
+    
+    ax.set_title('Causal Impact: Difference from Counterfactual (Hawaii - Synthetic Hawaii)', fontsize=13, fontweight='bold', pad=15)
+    ax.set_xlabel('Weekly Hours Worked', fontsize=11, labelpad=10)
+    ax.set_ylabel('Difference (Percentage Points)', fontsize=11, labelpad=10)
+    ax.set_xticks(hours)
+    ax.grid(True, which='both', linestyle='--', linewidth=0.5, color=PALETTE['grid'])
+    ax.legend(loc='upper right')
+    
+    plt.tight_layout()
+    return fig
+
